@@ -3,7 +3,6 @@ import asyncio
 import json
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from aiogram.utils import Dispatcher
 from config import TOKEN, ADMIN_ID
 
 bot = Bot(token=TOKEN)
