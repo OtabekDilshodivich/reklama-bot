@@ -1,4 +1,3 @@
-
 import asyncio
 import json
 from aiogram import Bot, Dispatcher, types
@@ -36,11 +35,13 @@ async def start(message: types.Message):
         return await message.answer("Kechirasiz, siz admin emassiz.")
     await message.answer("Reklama botiga xush kelibsiz!", reply_markup=menu)
 
+# Kanal qo‘shish
 @dp.message_handler(lambda m: m.text == "➕ Kanal qo‘shish")
 async def add_channel(message: types.Message):
     if message.from_user.id != ADMIN_ID:
         return
     await message.answer("Kanal usernameni yuboring (masalan: @kanalim)")
+
     @dp.message_handler()
     async def save_channel(m: types.Message):
         chans = load_json(CHANNELS_FILE)
@@ -48,6 +49,7 @@ async def add_channel(message: types.Message):
         save_json(CHANNELS_FILE, chans)
         await m.answer("Kanal qo‘shildi.")
 
+# Kanalni o‘chirish
 @dp.message_handler(lambda m: m.text == "❌ Kanalni o‘chirish")
 async def delete_channel(message: types.Message):
     if message.from_user.id != ADMIN_ID:
@@ -55,6 +57,7 @@ async def delete_channel(message: types.Message):
     chans = load_json(CHANNELS_FILE)
     if chans:
         await message.answer("O‘chirmoqchi bo‘lgan kanal usernameni yuboring:")
+
         @dp.message_handler()
         async def delete_ch(m: types.Message):
             if m.text in chans:
@@ -66,11 +69,13 @@ async def delete_channel(message: types.Message):
     else:
         await message.answer("Kanal ro'yxati bo‘sh.")
 
+# Reklama kiritish
 @dp.message_handler(lambda m: m.text == "✏️ Reklama kiritish")
 async def set_ad_text(message: types.Message):
     if message.from_user.id != ADMIN_ID:
         return
     await message.answer("Reklama matnini yuboring:")
+
     @dp.message_handler()
     async def save_ad_text(m: types.Message):
         ad = load_json(AD_FILE)
@@ -78,11 +83,13 @@ async def set_ad_text(message: types.Message):
         save_json(AD_FILE, ad)
         await m.answer("Reklama matni saqlandi.")
 
+# Media yuklash
 @dp.message_handler(lambda m: m.text == "🖼 Media yuklash")
 async def upload_media(message: types.Message):
     if message.from_user.id != ADMIN_ID:
         return
     await message.answer("Rasm yoki video yuboring:")
+
     @dp.message_handler(content_types=['photo', 'video'])
     async def save_media(m: types.Message):
         ad = load_json(AD_FILE)
@@ -93,6 +100,7 @@ async def upload_media(message: types.Message):
         save_json(AD_FILE, ad)
         await m.answer("Media saqlandi.")
 
+# Reklamani o‘chirish
 @dp.message_handler(lambda m: m.text == "❌ Reklamani o‘chirish")
 async def delete_ad(message: types.Message):
     if message.from_user.id != ADMIN_ID:
@@ -100,6 +108,7 @@ async def delete_ad(message: types.Message):
     save_json(AD_FILE, {})
     await message.answer("Reklama o‘chirildi.")
 
+# Reklamani to‘xtatish
 @dp.message_handler(lambda m: m.text == "⏸ Reklamani to‘xtatish")
 async def stop_ads(message: types.Message):
     if message.from_user.id != ADMIN_ID:
@@ -108,6 +117,7 @@ async def stop_ads(message: types.Message):
     STOP_AD = True
     await message.answer("Reklama to‘xtatildi.")
 
+# Reklamani yangilash
 @dp.message_handler(lambda m: m.text == "♻️ Reklamani yangilash")
 async def resume_ads(message: types.Message):
     if message.from_user.id != ADMIN_ID:
